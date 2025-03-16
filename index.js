@@ -7,10 +7,8 @@ const {
   Routes,
 } = require("discord.js");
 
-// Create the bot client
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-// Define the slash commands
 const commands = [
   new SlashCommandBuilder()
     .setName("serverip")
@@ -19,6 +17,10 @@ const commands = [
   new SlashCommandBuilder()
     .setName("donate")
     .setDescription("Provides the donation link to help with server costs."),
+
+  new SlashCommandBuilder()
+    .setName("rules")
+    .setDescription("Displays the rules for the VLR Minecarft server."),
 
   new SlashCommandBuilder()
     .setName("modhelp")
@@ -34,19 +36,17 @@ const commands = [
 client.once("ready", async () => {
   console.log(`✅ Logged in as ${client.user.tag}!`);
 
-  // Register slash commands
   const rest = new REST({ version: "10" }).setToken(process.env.TOKEN);
   try {
     await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), {
       body: commands,
     });
-    console.log("✅ v2 Slash commands registered successfully!");
+    console.log("✅ v3 Slash commands registered successfully!");
   } catch (error) {
     console.error("Failed to register commands:", error);
   }
 });
 
-// Command Handling
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isCommand()) return;
 
@@ -55,10 +55,10 @@ client.on("interactionCreate", async (interaction) => {
       await interaction.reply({
         content: `🌍 **This Minecraft server is set up to run globally with low latency.**  
 Please use the IP closest to you:  
-🇺🇸 US: \`66.94.98.250\`  
-🇪🇺 EU: \`207.180.236.54\`  
-🇦🇺 AU: \`46.250.243.60\``,
-        ephemeral: false, // Set to true if you want only the user to see it
+🇺🇸 US: \`US.play.mxn.au\`  
+🇪🇺 EU: \`EU.play.mxn.au\`  
+🇦🇺 AU: \`AU.play.mxn.au\``,
+        ephemeral: false,
       });
       break;
 
@@ -71,11 +71,26 @@ They can be quite costly, so any support is appreciated. Click below to donate:
       });
       break;
 
+    case "rules":
+      await interaction.reply({
+        content: `📃 **VLR Minecraft Server Rules**  
+        1. **VLR Exclusive Server.** This server is for VLR members only, however you may invite one guest.  
+        2. **No griefing or stealing.** This includes taking items from other players without permission.  
+        3. **No hacking or cheating.** This includes using mods or hacks that give you an unfair advantage.  
+        4. **No spamming or trolling.** This includes excessive use of chat or actions that disrupt the game for others.  
+        5. **Respect all players.** Treat others as you would like to be treated.  
+        6. **Who are you?** Please use your Discord name or let us know what your username is.  
+        7. **Have fun!** Enjoy your time on the server! Remember, it's just a game and none of the mods are paid.  
+        8. **Report issues.** If you see a problem, let a mod know. We can't fix what we don't know about.`,
+        ephemeral: false,
+      });
+      break;
+
     case "modhelp":
       const user = interaction.options.getUser("user");
       await interaction.reply({
         content: `🚨 **${user} needs help!**  
-**<@thatmasonguy>** & **<@funkyfroggy>**, please assist.`,
+**@thatmasonguy** & **@funkyfroggy**, please assist.`,
         ephemeral: false,
       });
       break;

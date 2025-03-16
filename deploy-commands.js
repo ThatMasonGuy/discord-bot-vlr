@@ -11,6 +11,10 @@ const commands = [
     .setDescription("Provides the donation link to help with server costs."),
 
   new SlashCommandBuilder()
+    .setName("rules")
+    .setDescription("Displays the rules for the VLR Minecarft server."),
+
+  new SlashCommandBuilder()
     .setName("modhelp")
     .setDescription("Alerts moderators that help is needed.")
     .addUserOption((option) =>
